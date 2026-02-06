@@ -40,7 +40,7 @@ install_brew_cask() {
 }
 
 # Fuentes y Casks
-brew tap homebrew/cask-fonts 2>/dev/null
+# brew tap homebrew/cask-fonts ya no es necesario en versiones modernas de brew
 install_brew_cask "font-jetbrains-mono-nerd-font"
 install_brew_cask "wezterm"
 
