@@ -222,6 +222,46 @@ require('lazy').setup({
   -- NOTE:  My Plugins
   { 'nvim-mini/mini.files', opts = {} },
   { 'echasnovski/mini.surround', opts = {} },
+  { 'echasnovski/mini.ai', version = false, opts = {} },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        theme = 'tokyonight',
+        component_separators = '|',
+        section_separators = '',
+      },
+    },
+  },
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      lsp = {
+        override = {
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+          ['cmp.entry.get_documentation'] = true,
+        },
+      },
+      presets = {
+        bottom_search = true,
+        command_palette = true,
+        long_message_to_split = true,
+        inc_rename = false,
+        lsp_doc_border = false,
+      },
+    },
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify',
+    },
+  },
+  {
+    'sindrets/diffview.nvim',
+    cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
+  },
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
