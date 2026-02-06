@@ -81,6 +81,11 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 
+-- Disable swap files to avoid E325 ATTENTION errors with session managers
+vim.o.swapfile = false
+-- Don't show the "ATTENTION" message when a swap file exists (handled by disabling them, but good as backup)
+vim.opt.shortmess:append 'A'
+
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
@@ -223,6 +228,44 @@ require('lazy').setup({
   { 'nvim-mini/mini.files', opts = {} },
   { 'echasnovski/mini.surround', opts = {} },
   { 'echasnovski/mini.ai', version = false, opts = {} },
+  {
+    'folke/persistence.nvim',
+    event = 'BufReadPre',
+    opts = {},
+    keys = {
+      { '<leader>qs', function() require('persistence').load() end, desc = 'Restore Session' },
+      { '<leader>ql', function() require('persistence').load { last = true } end, desc = 'Restore Last Session' },
+      { '<leader>qd', function() require('persistence').stop() end, desc = "Don't Save Current Session" },
+    },
+  },
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      local harpoon = require 'harpoon'
+      harpoon:setup()
+
+      vim.keymap.set('n', '<leader>ha', function() harpoon:list():add() end, { desc = 'Harpoon: Add file' })
+      vim.keymap.set('n', '<leader>he', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = 'Harpoon: Toggle menu' })
+
+      vim.keymap.set('n', '<leader>h1', function() harpoon:list():select(1) end, { desc = 'Harpoon: Select 1' })
+      vim.keymap.set('n', '<leader>h2', function() harpoon:list():select(2) end, { desc = 'Harpoon: Select 2' })
+      vim.keymap.set('n', '<leader>h3', function() harpoon:list():select(3) end, { desc = 'Harpoon: Select 4' })
+      vim.keymap.set('n', '<leader>h4', function() harpoon:list():select(4) end, { desc = 'Harpoon: Select 4' })
+    end,
+  },
+  {
+    'mbbill/undotree',
+    keys = {
+      { '<leader>u', vim.cmd.UndotreeToggle, desc = 'Toggle Undotree' },
+    },
+  },
+  {
+    'Wansmer/treesj',
+    keys = { { '<leader>m', '<cmd>TSJToggle<cr>', desc = 'Toggle Split/Join' } },
+    opts = { use_default_keymaps = false },
+  },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -372,7 +415,9 @@ require('lazy').setup({
       spec = {
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>h', group = '[H]arpoon / Git', mode = { 'n', 'v' } },
+        { '<leader>q', group = '[Q]uickfix / Session' },
+        { '<leader>x', group = '[X] Trouble' },
         { 'gr', group = '[G]oto & LSP' },
         { 'g', group = '[G]oto' },
       },
